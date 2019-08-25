@@ -21,28 +21,13 @@ router.post('/user', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
-
-    try {
-        const user = await User.findOne({ email });
-
-        if(!user) {
-            res.status(400).send();
-        }
-
-        const isMatch = await bcrypt.compare(password, user.password);
-        
-        if(!isMatch) {
-            res.status(400).send();
-        }
-
-        res.send("It worked!")
-        console.log("This login attempt worked...")
+ try {
+        const user = await User.findByCredentials(req.body.email, req.body.password);
+        const token = await User.generateAuthToken();
+        res.send({ user, token });
     } catch(e) {
         res.status(500).send();
     }
-    
-})
+});
 
 module.exports = router;
