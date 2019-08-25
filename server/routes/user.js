@@ -1,6 +1,6 @@
 const express = require('express');
 const User = require('../models/user');
-
+const bcrypt = require('bcrypt');
 
 const router = new express.Router();
 
@@ -19,5 +19,30 @@ router.post('/user', async (req, res) => {
         res.status(500).send(e);
     }
 });
+
+router.post('/login', async (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    try {
+        const user = await User.findOne({ email });
+
+        if(!user) {
+            res.status(400).send();
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        
+        if(!isMatch) {
+            res.status(400).send();
+        }
+
+        res.send("It worked!")
+        console.log("This login attempt worked...")
+    } catch(e) {
+        res.status(500).send();
+    }
+    
+})
 
 module.exports = router;
