@@ -21,10 +21,16 @@ const userSchema = new mongoose.Schema({
         trim: true,
         lowercase: true,
         required: true,
-    }
+    },
+    tokens: [{
+        token: {
+            type: String,
+            required: true
+        }
+    }]
 })
 
-userSchema.methods.generateAuthTokens = async function () {
+userSchema.methods.generateAuthToken = async function () {
     const user = this;
 
     const token = jwt.sign({ _id: user.id.toString() }, 'shh');
@@ -32,6 +38,22 @@ userSchema.methods.generateAuthTokens = async function () {
 
     await user.save();
     return token;
+}
+
+userSchema.methods.findByCredentials = async function(email, password) {
+    const user = User.findOne({ email });
+
+    if(!user) {
+        throw new Error("Unable to log in");
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if(!isMatch) {
+        throw new Error("Unable to log in");
+    }
+
+    return user;
 }
 
 userSchema.pre('save', async function (next) {
