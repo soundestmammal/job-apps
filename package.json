@@ -3,25 +3,28 @@
   "version": "1.0.0",
   "description": "job-apps",
   "main": "index.js",
-  "scripts": {
-    "dev": "nodemon server/index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/soundestmammal/job-apps.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/soundestmammal/job-apps/issues"
-  },
-  "homepage": "https://github.com/soundestmammal/job-apps#readme",
   "dependencies": {
     "bcrypt": "^3.0.6",
+    "concurrently": "^4.1.2",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.6.10",
     "nodemon": "^1.19.1",
     "validator": "^11.1.0"
-  }
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "concurrently \"cd server && node index.js\" \"cd client && npm start\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soundestmammal/job-apps.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/soundestmammal/job-apps/issues"
+  },
+  "homepage": "https://github.com/soundestmammal/job-apps#readme"
 }
